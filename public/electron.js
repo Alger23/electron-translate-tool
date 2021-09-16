@@ -4,6 +4,8 @@ const isDev = require("electron-is-dev");
 const {app, BrowserWindow} = electron;
 const {ipcMain} = electron;
 
+const translate = require('@vitalets/google-translate-api');
+
 let mainWindow;
 
 function createWindow() {
@@ -50,3 +52,17 @@ app.on("activate", () => {
 });
 
 ipcMain.on('click', ()=> console.log('do click'));
+
+ipcMain.on('translate', (event, args)=>{
+    console.log(args)
+    translate(args.text, {from: args.from, to: args.to}).then(res => {
+        console.log(res.text);
+        console.log(res.from.language.iso);
+        //=> nl
+
+        event.reply('translated', res.text);
+        //mainWindow.webContents.send("translated", res.text);
+    }).catch(err => {
+        console.error(err);
+    });
+});
