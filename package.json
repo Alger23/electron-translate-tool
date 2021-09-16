@@ -34,7 +34,8 @@
     "electron-build": "electron-builder -mwl",
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\""
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\"",
+    "start-main-debug": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron . --inspect=5858 --remote-debugging-port=9223\""
   },
   "eslintConfig": {
     "extends": [
