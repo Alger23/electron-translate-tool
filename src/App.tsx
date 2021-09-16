@@ -2,7 +2,17 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const electron = window.require('electron');
+const {remote, ipcRenderer} = electron;
+//const {BrowserWindow,dialog,Menu} = remote;
+
+
 function App() {
+
+  const click = ()=> {
+    ipcRenderer.send('click')
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +28,7 @@ function App() {
         >
           Learn React
         </a>
+        <button onClick={click}>Send to ipcMain</button>
       </header>
     </div>
   );

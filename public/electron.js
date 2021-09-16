@@ -2,6 +2,7 @@ const electron = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 const {app, BrowserWindow} = electron;
+const {ipcMain} = electron;
 
 let mainWindow;
 
@@ -12,6 +13,8 @@ function createWindow() {
         height: 680,
         webPreferences: {
             nodeIntegration: true,
+            enableRemoteModule:true,
+            contextIsolation: false,
         },
     });
     mainWindow.loadURL(
@@ -45,3 +48,5 @@ app.on("activate", () => {
         createWindow();
     }
 });
+
+ipcMain.on('click', ()=> console.log('do click'));
