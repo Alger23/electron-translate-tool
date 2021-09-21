@@ -3,7 +3,8 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 const {app, BrowserWindow} = electron;
 const {ipcMain} = electron;
-
+const initAppMenu = require('./menu/menu');
+const initDockMenu = require("./menu/dockMenu");
 const translate = require('@vitalets/google-translate-api');
 
 let mainWindow;
@@ -11,11 +12,11 @@ let mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({
         title: 'Translate Tools',
-        width: 900,
-        height: 680,
+        width: 320,
+        height: 240,
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule:true,
+            enableRemoteModule: true,
             contextIsolation: false,
         },
     });
@@ -26,13 +27,17 @@ function createWindow() {
     );
     mainWindow.on("closed", () => (mainWindow = null));
     // Open the DevTools.
-    if (isDev) {
-        mainWindow.webContents.openDevTools({mode: 'detach'});
-    }
+    // if (isDev) {
+    //     mainWindow.webContents.openDevTools({mode: 'detach'});
+    // }
 }
 
-//app.on("ready", createWindow);
-app.whenReady().then(createWindow);
+app.on("ready", () => {
+    initAppMenu();
+    initDockMenu();
+    createWindow();
+});
+//app.whenReady().then(createWindow);
 app.on("window-all-closed", () => {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
@@ -51,9 +56,9 @@ app.on("activate", () => {
     }
 });
 
-ipcMain.on('click', ()=> console.log('do click'));
+ipcMain.on('click', () => console.log('do click'));
 
-ipcMain.on('translate', (event, args)=>{
+ipcMain.on('translate', (event, args) => {
     console.log(args)
     translate(args.text, {from: args.from, to: args.to}).then(res => {
         console.log(res.text);
