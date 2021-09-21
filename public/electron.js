@@ -5,6 +5,7 @@ const {app, BrowserWindow} = electron;
 const {ipcMain} = electron;
 const initAppMenu = require('./menu/menu');
 const initDockMenu = require("./menu/dockMenu");
+const initContextMenu = require("./menu/contextMenu");
 const translate = require('@vitalets/google-translate-api');
 
 let mainWindow;
@@ -33,9 +34,10 @@ function createWindow() {
 }
 
 app.on("ready", () => {
+    createWindow();
     initAppMenu();
     initDockMenu();
-    createWindow();
+    initContextMenu(mainWindow);
 });
 //app.whenReady().then(createWindow);
 app.on("window-all-closed", () => {
