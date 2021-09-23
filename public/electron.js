@@ -3,27 +3,33 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 const {app, BrowserWindow} = electron;
 const {ipcMain} = electron;
-const initAppMenu = require('./menu/menu');
-const initDockMenu = require("./menu/dockMenu");
-const initContextMenu = require("./menu/contextMenu");
-const translate = require('@vitalets/google-translate-api');
+const initAppMenu = require('./app/menu/menu');
+const initDockMenu = require("./app/menu/dockMenu");
+const initContextMenu = require("./app/menu/contextMenu");
+
+const initGoogleTranslate = require('./app/translate/googleTranslate');
+
+const port = process.env.PORT ? process.env.PORT : 3000;
+const ELECTRON_START_URL = `http://localhost:${port}`;
+
 
 let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
         title: 'Translate Tools',
-        width: 320,
-        height: 240,
+        width: 1024,
+        height: 768,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true,
             contextIsolation: false,
+            nativeWindowOpen: true,
         },
     });
     mainWindow.loadURL(
         isDev
-            ? "http://localhost:3003"
+            ? `${ELECTRON_START_URL}`
             : `file://${path.join(__dirname, "../build/index.html")}`
     );
     mainWindow.on("closed", () => (mainWindow = null));
@@ -59,17 +65,9 @@ app.on("activate", () => {
 });
 
 ipcMain.on('click', () => console.log('do click'));
+initGoogleTranslate();
 
-ipcMain.on('translate', (event, args) => {
-    console.log(args)
-    translate(args.text, {from: args.from, to: args.to}).then(res => {
-        console.log(res.text);
-        console.log(res.from.language.iso);
-        //=> nl
-
-        event.reply('translated', res.text);
-        //mainWindow.webContents.send("translated", res.text);
-    }).catch(err => {
-        console.error(err);
-    });
-});
+try {
+    require('electron-reloader')(module);
+} catch {
+}

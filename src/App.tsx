@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
-import TranslateSample from "./samples/TranslateSample";
-import TranslateMultiple from "./pages/TranslateMultiple";
+import TranslateBox from "./pages/TranslateBox";
 
 function App() {
 
   return (
-    <div className="App">
-      <TranslateSample/>
-      <TranslateMultiple/>
+    <div className="App container-fluid">
+      <TranslateBox/>
     </div>
   );
 }

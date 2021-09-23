@@ -8,6 +8,7 @@
     <node-interpreter value="project" />
     <envs>
       <env name="BROWSER" value="none" />
+      <env name="PORT" value="3003" />
     </envs>
     <method v="2" />
   </configuration>
