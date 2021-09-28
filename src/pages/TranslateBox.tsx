@@ -1,16 +1,68 @@
-import React, {SyntheticEvent, useEffect, useMemo, useState} from "react";
-import {GoogleTranslateLanguages} from "../constants/GoogleTranslateLanguages";
-import {TranslateMessage, useGoogleTranslate} from "../hooks/useGoogleTranslate";
-import {Button, Container, Dropdown, Form, Label, Menu, Table, TextArea} from "semantic-ui-react";
+import React, { SyntheticEvent, useEffect, useMemo, useState } from "react";
+import { GoogleTranslateLanguages } from "../constants/GoogleTranslateLanguages";
+import { TranslateMessage, useGoogleTranslate } from "../hooks/useGoogleTranslate";
+import { Button, Container, Dropdown, Form, Icon, Label, Menu, Popup, Table, TextArea } from "semantic-ui-react";
+import { Ref } from 'semantic-ui-react';
 
 const shell = window.require('electron').shell;
 
+
+interface TextContentProps {
+  label: string;
+  value: string;
+  pronunciation: string;
+}
+
+const TextContent = ({ label, value, pronunciation }: TextContentProps) => {
+  //const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [copyState, setCopyState] = React.useState('👈 Copy with that button')
+
+  return (
+    <>
+      <Table.Row>
+        <Table.Cell width={2}>
+          <Popup content={copyState} on="click" pinned
+            trigger={<Label onClick={(e) => {
+              // textareaRef.current?.select();
+              // const wasSuccessful = document.execCommand('copy');
+              // setCopyState(wasSuccessful ? '👍 Text copied' : 'Unable to copy')
+              //// or 
+              navigator.clipboard.writeText(value)
+                .then(() => {
+                  console.log(`"${value}" was copied to clipboard.`);
+                  setCopyState('👍 Text copied');
+                })
+                .catch((err) => {
+                  console.error(`Error copying text to clipboard: ${err}`);
+                  setCopyState('Unable to copy');
+                });
+            }}>
+              <Icon name="copy" /> {label}
+            </Label>} />
+
+
+        </Table.Cell>
+        <Table.Cell>
+          {/* <Form>
+            <Ref innerRef={textareaRef}>
+              <TextArea fluid value={value} rows={1} />
+            </Ref>
+            <span style={{ marginLeft: '1em' }}>{pronunciation}</span>
+          </Form> */}
+          <div>{value}</div>
+          <span style={{ marginLeft: '0em' }}>{pronunciation}</span>
+        </Table.Cell>
+      </Table.Row>
+    </>
+  );
+};
+
 const TranslateBox = () => {
-  const options = GoogleTranslateLanguages.map(x => ({key: x.cultureName, value: x.cultureName, text: x.displayName}));
+  const options = GoogleTranslateLanguages.map(x => ({ key: x.cultureName, value: x.cultureName, text: x.displayName }));
   const [rawText, setRawText] = useState<string>('');
   const [langFrom, setLangFrom] = useState<string>('auto');
-  const [lang, setLang] = useState(['zh-TW']);
-  const {translated, setTranslateMessage, removeTranslate} = useGoogleTranslate();
+  const [lang, setLang] = useState(['zh-TW', 'zh-CN', 'th', 'en']);
+  const { translated, setTranslateMessage, removeTranslate } = useGoogleTranslate();
 
   useEffect(() => {
     return () => removeTranslate();
@@ -27,19 +79,12 @@ const TranslateBox = () => {
       if (translated[key] === undefined) return '';
       return translated[key].pronunciation || '';
     };
-    return lang.map((key, i) => (
-      <Table.Row key={key}>
-        <Table.Cell width={1}>
-          <Label ribbon>{key}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Form>
-            <TextArea fluid value={getTranslateValue(key)}/>
-            {getPronunciation(key)}
-          </Form>
-        </Table.Cell>
-      </Table.Row>
-    ));
+    return lang.map((langCode, i) => {
+      return (<TextContent key={i}
+        label={langCode}
+        value={getTranslateValue(langCode)}
+        pronunciation={getPronunciation(langCode)} />);
+    });
   }, [lang, translated]);
 
   const doTranslate = () => {
@@ -58,24 +103,24 @@ const TranslateBox = () => {
 
   return (
     <div>
-      <Container style={{padding: '1em 0em'}}>
+      <Container style={{ padding: '1em 0em' }}>
         <Table celled>
           <Table.Header>
 
             <Table.Row>
-              <Table.HeaderCell colSpan={2}>
+              <Table.HeaderCell colSpan={3}>
                 <Form>
                   <Dropdown placeholder="Select language"
-                            fluid
-                            search
-                            selection
-                            options={options}
-                            value={langFrom}
-                            onChange={(e, d) => setLangFrom(Object(d)['value'])}/>
-                  <TextArea placeholder='hello' value={rawText} onChange={(e, d) => setRawText(Object(d)['value'])}/>
+                    fluid
+                    search
+                    selection
+                    options={options}
+                    value={langFrom}
+                    onChange={(e, d) => setLangFrom(Object(d)['value'])} />
+                  <TextArea placeholder='hello' value={rawText} onChange={(e, d) => setRawText(Object(d)['value'])} />
                   <Button.Group fluid>
                     <Button onClick={doTranslate}>Translate</Button>
-                    <Button.Or/>
+                    <Button.Or />
                     <Button onClick={openBrowser}>Google Translate</Button>
                   </Button.Group>
                 </Form>
@@ -83,16 +128,16 @@ const TranslateBox = () => {
             </Table.Row>
 
             <Table.Row>
-              <Table.HeaderCell colSpan={2}>
+              <Table.HeaderCell colSpan={3}>
                 <Menu>
                   <Dropdown placeholder="Select language"
-                            fluid
-                            multiple
-                            search
-                            selection
-                            options={options}
-                            value={lang}
-                            onChange={(e, d) => setLang(Object(d)['value'])}/>
+                    fluid
+                    multiple
+                    search
+                    selection
+                    options={options}
+                    value={lang}
+                    onChange={(e, d) => setLang(Object(d)['value'])} />
                 </Menu>
               </Table.HeaderCell>
             </Table.Row>
