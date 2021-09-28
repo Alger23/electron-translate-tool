@@ -30,14 +30,14 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "react-start": "PORT=3003 react-scripts start",
+    "react-start": "react-scripts start",
     "react-build": "react-scripts build",
     "react-test": "react-scripts test --env=jsdom",
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder -m",
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\"",
+    "start": "PORT=3003 concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\"",
     "start-main-debug": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron . --inspect=5858 --remote-debugging-port=9223\""
   },
   "eslintConfig": {
