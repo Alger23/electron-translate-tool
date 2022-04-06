@@ -62,24 +62,7 @@ const TranslateBox = () => {
   const [rawText, setRawText] = useState<string>('');
   const [langFrom, setLangFrom] = useState<string>('auto');
   const [lang, setLang] = useState(['en', 'zh-CN', 'zh-TW']);
-  const {translated, setTranslateMessage/*, removeTranslate*/} = useGoogleTranslate();
-  // const textAreaRef = React.useRef(null);
-
-  // useEffect(() => {
-  //   function onFocus(event:React.FocusEvent<HTMLInputElement>) {
-  //     event.target.select();
-  //   }
-  //   if (textAreaRef && textAreaRef.current) {
-  //     (textAreaRef.current as any).ref.current.addEventListener("focus", onFocus , false);
-  //     return function cleanup() {
-  //       (textAreaRef.current as any).ref.current.removeEventListener("focus", onFocus , false);
-  //     }
-  //   }
-  // }, [textAreaRef]);
-
-  // useEffect(() => {
-  //   return () => removeTranslate();
-  // }, [removeTranslate]);
+  const {translated, setTranslateMessage} = useGoogleTranslate();
 
   const results = useMemo(() => {
     const getTranslateValue = (key: string) => {
@@ -133,7 +116,6 @@ const TranslateBox = () => {
                   <TextArea placeholder='hello'
                             value={rawText}
                             onChange={(e, d) => setRawText(Object(d)['value'])}
-                            //ref={textAreaRef}
                             onFocus={(event:React.FocusEvent<HTMLInputElement> )=>{
                               event.target.select();
                             }}
