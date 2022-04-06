@@ -18,8 +18,8 @@ let mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({
         title: 'Translate Tools',
-        width: 1024,
-        height: 768,
+        width: 780,
+        height: 520,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true,
