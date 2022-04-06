@@ -1,8 +1,8 @@
-import React, { SyntheticEvent, useEffect, useMemo, useState } from "react";
-import { GoogleTranslateLanguages } from "../constants/GoogleTranslateLanguages";
-import { TranslateMessage, useGoogleTranslate } from "../hooks/useGoogleTranslate";
-import { Button, Container, Dropdown, Form, Icon, Label, Menu, Popup, Table, TextArea } from "semantic-ui-react";
-import { Ref } from 'semantic-ui-react';
+import React, {SyntheticEvent, useMemo, useState} from "react";
+import {GoogleTranslateLanguages} from "../constants/GoogleTranslateLanguages";
+import {TranslateMessage, useGoogleTranslate} from "../hooks/useGoogleTranslate";
+import {Button, Container, Dropdown, Form, Icon, Label, Menu, Popup, Table, TextArea} from "semantic-ui-react";
+// import {Ref} from 'semantic-ui-react';
 
 const shell = window.require('electron').shell;
 
@@ -13,7 +13,7 @@ interface TextContentProps {
   pronunciation: string;
 }
 
-const TextContent = ({ label, value, pronunciation }: TextContentProps) => {
+const TextContent = ({label, value, pronunciation}: TextContentProps) => {
   //const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [copyState, setCopyState] = React.useState('👈 Copy with that button')
 
@@ -22,23 +22,23 @@ const TextContent = ({ label, value, pronunciation }: TextContentProps) => {
       <Table.Row>
         <Table.Cell width={2}>
           <Popup content={copyState} on="click" pinned
-            trigger={<Label onClick={(e) => {
-              // textareaRef.current?.select();
-              // const wasSuccessful = document.execCommand('copy');
-              // setCopyState(wasSuccessful ? '👍 Text copied' : 'Unable to copy')
-              //// or 
-              navigator.clipboard.writeText(value)
-                .then(() => {
-                  console.log(`"${value}" was copied to clipboard.`);
-                  setCopyState('👍 Text copied');
-                })
-                .catch((err) => {
-                  console.error(`Error copying text to clipboard: ${err}`);
-                  setCopyState('Unable to copy');
-                });
-            }}>
-              <Icon name="copy" /> {label}
-            </Label>} />
+                 trigger={<Label onClick={(e) => {
+                   // textareaRef.current?.select();
+                   // const wasSuccessful = document.execCommand('copy');
+                   // setCopyState(wasSuccessful ? '👍 Text copied' : 'Unable to copy')
+                   //// or
+                   navigator.clipboard.writeText(value)
+                     .then(() => {
+                       console.log(`"${value}" was copied to clipboard.`);
+                       setCopyState('👍 Text copied');
+                     })
+                     .catch((err) => {
+                       console.error(`Error copying text to clipboard: ${err}`);
+                       setCopyState('Unable to copy');
+                     });
+                 }}>
+                   <Icon name="copy"/> {label}
+                 </Label>}/>
 
 
         </Table.Cell>
@@ -50,7 +50,7 @@ const TextContent = ({ label, value, pronunciation }: TextContentProps) => {
             <span style={{ marginLeft: '1em' }}>{pronunciation}</span>
           </Form> */}
           <div>{value}</div>
-          <span style={{ marginLeft: '0em' }}>{pronunciation}</span>
+          <span style={{marginLeft: '0em'}}>{pronunciation}</span>
         </Table.Cell>
       </Table.Row>
     </>
@@ -58,15 +58,28 @@ const TextContent = ({ label, value, pronunciation }: TextContentProps) => {
 };
 
 const TranslateBox = () => {
-  const options = GoogleTranslateLanguages.map(x => ({ key: x.cultureName, value: x.cultureName, text: x.displayName }));
+  const options = GoogleTranslateLanguages.map(x => ({key: x.cultureName, value: x.cultureName, text: x.displayName}));
   const [rawText, setRawText] = useState<string>('');
   const [langFrom, setLangFrom] = useState<string>('auto');
-  const [lang, setLang] = useState(['zh-TW', 'zh-CN', 'th', 'en']);
-  const { translated, setTranslateMessage, removeTranslate } = useGoogleTranslate();
+  const [lang, setLang] = useState(['en', 'zh-CN', 'zh-TW']);
+  const {translated, setTranslateMessage/*, removeTranslate*/} = useGoogleTranslate();
+  // const textAreaRef = React.useRef(null);
 
-  useEffect(() => {
-    return () => removeTranslate();
-  }, [removeTranslate]);
+  // useEffect(() => {
+  //   function onFocus(event:React.FocusEvent<HTMLInputElement>) {
+  //     event.target.select();
+  //   }
+  //   if (textAreaRef && textAreaRef.current) {
+  //     (textAreaRef.current as any).ref.current.addEventListener("focus", onFocus , false);
+  //     return function cleanup() {
+  //       (textAreaRef.current as any).ref.current.removeEventListener("focus", onFocus , false);
+  //     }
+  //   }
+  // }, [textAreaRef]);
+
+  // useEffect(() => {
+  //   return () => removeTranslate();
+  // }, [removeTranslate]);
 
   const results = useMemo(() => {
     const getTranslateValue = (key: string) => {
@@ -81,9 +94,9 @@ const TranslateBox = () => {
     };
     return lang.map((langCode, i) => {
       return (<TextContent key={i}
-        label={langCode}
-        value={getTranslateValue(langCode)}
-        pronunciation={getPronunciation(langCode)} />);
+                           label={langCode}
+                           value={getTranslateValue(langCode)}
+                           pronunciation={getPronunciation(langCode)}/>);
     });
   }, [lang, translated]);
 
@@ -103,7 +116,7 @@ const TranslateBox = () => {
 
   return (
     <div>
-      <Container style={{ padding: '1em 0em' }}>
+      <Container style={{padding: '1em 0em'}}>
         <Table celled>
           <Table.Header>
 
@@ -111,16 +124,27 @@ const TranslateBox = () => {
               <Table.HeaderCell colSpan={3}>
                 <Form>
                   <Dropdown placeholder="Select language"
-                    fluid
-                    search
-                    selection
-                    options={options}
-                    value={langFrom}
-                    onChange={(e, d) => setLangFrom(Object(d)['value'])} />
-                  <TextArea placeholder='hello' value={rawText} onChange={(e, d) => setRawText(Object(d)['value'])} />
+                            fluid
+                            search
+                            selection
+                            options={options}
+                            value={langFrom}
+                            onChange={(e, d) => setLangFrom(Object(d)['value'])}/>
+                  <TextArea placeholder='hello'
+                            value={rawText}
+                            onChange={(e, d) => setRawText(Object(d)['value'])}
+                            //ref={textAreaRef}
+                            onFocus={(event:React.FocusEvent<HTMLInputElement> )=>{
+                              event.target.select();
+                            }}
+                            onKeyPress={(event: React.KeyboardEvent) => {
+                              if(event.ctrlKey && event.key === "Enter"){
+                                doTranslate();
+                              }
+                            }}/>
                   <Button.Group fluid>
-                    <Button onClick={doTranslate}>Translate</Button>
-                    <Button.Or />
+                    <Button onClick={doTranslate}>Translate (Ctrl + Enter)</Button>
+                    <Button.Or/>
                     <Button onClick={openBrowser}>Google Translate</Button>
                   </Button.Group>
                 </Form>
@@ -131,13 +155,13 @@ const TranslateBox = () => {
               <Table.HeaderCell colSpan={3}>
                 <Menu>
                   <Dropdown placeholder="Select language"
-                    fluid
-                    multiple
-                    search
-                    selection
-                    options={options}
-                    value={lang}
-                    onChange={(e, d) => setLang(Object(d)['value'])} />
+                            fluid
+                            multiple
+                            search
+                            selection
+                            options={options}
+                            value={lang}
+                            onChange={(e, d) => setLang(Object(d)['value'])}/>
                 </Menu>
               </Table.HeaderCell>
             </Table.Row>

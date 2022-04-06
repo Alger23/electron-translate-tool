@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const electron = window.require('electron');
 const {ipcRenderer} = electron;
@@ -35,13 +35,16 @@ export const useGoogleTranslate = () => {
     console.log(args);
   };
 
-  ipcRenderer.on(ReplyGoogleTranslateEventName, handleTranslated);
-  ipcRenderer.on(ErrorGoogleTranslateEventName, handleTranslateError);
+  useEffect(()=>{
+    ipcRenderer.on(ReplyGoogleTranslateEventName, handleTranslated);
+    ipcRenderer.on(ErrorGoogleTranslateEventName, handleTranslateError);
 
-  function removeTranslate() {
-    ipcRenderer.off(ReplyGoogleTranslateEventName, handleTranslated);
-    ipcRenderer.off(ErrorGoogleTranslateEventName, handleTranslateError);
-  }
+   return function removeTranslate() {
+      ipcRenderer.off(ReplyGoogleTranslateEventName, handleTranslated);
+      ipcRenderer.off(ErrorGoogleTranslateEventName, handleTranslateError);
+    }
+  },[]);
+
 
   // const message: TranslateMessage = {
   //   from: 'en',
@@ -52,5 +55,5 @@ export const useGoogleTranslate = () => {
     ipcRenderer.send(RequestGoogleTranslateEventName, message);
   }
 
-  return {translated, setTranslateMessage, removeTranslate};
+  return {translated, setTranslateMessage/*, removeTranslate*/};
 };
