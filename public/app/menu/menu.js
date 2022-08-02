@@ -21,24 +21,24 @@ const appMenuTemplate = [
         ]
     }] : []),
     // { role: 'fileMenu' }
-    {
-        label: 'File',
-        submenu: [
-            {
-                label: 'New project',
-                accelerator: 'Shift+CmdOrCtrl+N',
-                click:()=> {
+    // {
+    //     label: 'File',
+    //     submenu: [
+    //         {
+    //             label: 'New project',
+    //             accelerator: 'Shift+CmdOrCtrl+N',
+    //             click:()=> {
 
-                }
-            },
-            {
-                label: 'Open project',
-                accelerator: 'CmdOrCtrl+O'
-            },
-            {type: 'separator'},
-            isMac ? {role: 'close'} : {role: 'quit'}
-        ]
-    },
+    //             }
+    //         },
+    //         {
+    //             label: 'Open project',
+    //             accelerator: 'CmdOrCtrl+O'
+    //         },
+    //         {type: 'separator'},
+    //         isMac ? {role: 'close'} : {role: 'quit'}
+    //     ]
+    // },
     // { role: 'editMenu' }
     {
         label: 'Edit',
@@ -69,20 +69,20 @@ const appMenuTemplate = [
         ]
     },
     // { role: 'viewMenu' }
-    {
-        label: 'View',
-        submenu: [
-            {role: 'reload'},
-            {role: 'forceReload'},
-            {role: 'toggleDevTools'},
-            {type: 'separator'},
-            {role: 'resetZoom'},
-            {role: 'zoomIn'},
-            {role: 'zoomOut'},
-            {type: 'separator'},
-            {role: 'togglefullscreen'}
-        ]
-    },
+    // {
+    //     label: 'View',
+    //     submenu: [
+    //         {role: 'reload'},
+    //         {role: 'forceReload'},
+    //         {role: 'toggleDevTools'},
+    //         {type: 'separator'},
+    //         {role: 'resetZoom'},
+    //         {role: 'zoomIn'},
+    //         {role: 'zoomOut'},
+    //         {type: 'separator'},
+    //         {role: 'togglefullscreen'}
+    //     ]
+    // },
     // { role: 'windowMenu' }
     {
         label: 'Window',
