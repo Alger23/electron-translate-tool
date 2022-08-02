@@ -42,7 +42,9 @@ function createWindow() {
 app.on("ready", () => {
     createWindow();
     initAppMenu();
-    initDockMenu();
+    if (process.platform === "darwin") {
+        initDockMenu();
+    }
     initContextMenu(mainWindow);
 });
 //app.whenReady().then(createWindow);

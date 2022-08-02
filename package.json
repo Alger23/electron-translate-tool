@@ -34,10 +34,10 @@
     "react-build": "react-scripts build",
     "react-test": "react-scripts test --env=jsdom",
     "react-eject": "react-scripts eject",
-    "electron-build": "electron-builder -m",
+    "electron-build": "electron-builder -w",
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
-    "start": "PORT=3003 concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\"",
+    "start": "cross-env PORT=3003 concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron .\"",
     "start-main-debug": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3003 && electron . --inspect=5858 --remote-debugging-port=9223\""
   },
   "eslintConfig": {
@@ -60,9 +60,9 @@
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
-    "electron": "^14.0.1",
-    "electron-builder": "^22.11.7",
-    "electron-reloader": "^1.2.1",
+    "electron": "^20.0.0",
+    "electron-builder": "^23.3.3",
+    "electron-reloader": "^1.2.3",
     "wait-on": "^6.0.0"
   }
 }
